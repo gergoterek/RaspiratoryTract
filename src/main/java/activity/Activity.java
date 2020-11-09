@@ -63,5 +63,4 @@ public abstract class Activity extends Subject {
         V = v;
     }
 
-
 }

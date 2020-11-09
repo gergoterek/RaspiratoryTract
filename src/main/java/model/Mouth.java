@@ -482,20 +482,12 @@ public class Mouth {
     public List<String> printRDE(){
         List<String> l = new ArrayList<>();
 
-//        l.add("\n\nET inh: " + RDE_inh_ET());
-//        l.add("BB inh: " + RDE_inh_BB());
-//        l.add("bb inh: " + RDE_inh_bb());
-//        l.add("AI inh: " + RDE_AI());
-//        l.add("bb exh: " + RDE_exh_bb());
-//        l.add("BB exh: " + RDE_exh_BB());
-//        l.add("ET exh: " + RDE_exh_ET());
-
         l.add("\nTOTAL Lung+ET:     " + sumRDE_Lung_ET());
+        l.add("LUNG BB+bb+AI:    " + sumRDE_BB_bb_AI());
         l.add("ET inh+exh:              " + sumRDE_ET());
         l.add("BB inh+exh:              " + sumRDE_BB());
         l.add("bb inh+exh:              " + ( sumRDE_bb()));
         l.add("AI:                               " + RDE_AI());
-        l.add("LUNG BB+bb+AI:    " + sumRDE_BB_bb_AI());
 
         return l;
     }

@@ -11,23 +11,21 @@ import org.jfree.chart.labels.ItemLabelPosition;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.ValueMarker;
+
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.ui.RectangleAnchor;
+
+
 import org.jfree.ui.TextAnchor;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Window extends JFrame {
     ActivityComboBox acb;
@@ -40,9 +38,6 @@ public class Window extends JFrame {
     public static String txt;
 
     JPanel p;
-    JPanel p2;
-    JPanel p3;
-    JPanel p4;
 
     static JTextField ta;
     static JTextField ta2;
@@ -68,9 +63,7 @@ public class Window extends JFrame {
         addWindowListener(new ExitAdapter());
 
         setTitle("ICRP");
-        setSize(1100, 800);
-//        setLayout(new FlowLayout());
-//        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setSize(1100, 860);
 
         getContentPane().setLayout(
                 new BoxLayout(getContentPane(), BoxLayout.Y_AXIS)
@@ -126,7 +119,6 @@ public class Window extends JFrame {
 
 
         p = new JPanel();
-        p2 = new JPanel();
 
         textArea.setText(txt);
         textArea.setEditable(false);
@@ -136,22 +128,15 @@ public class Window extends JFrame {
         p.add(textArea);
 
         JPanel outer = new JPanel(new BorderLayout());
+
         outer.add(p, BorderLayout.NORTH);
         getContentPane().add(outer);
-
-//        p2.add(j1, j2);
-//        p2.add(j3, j4);
-//        outer.add(p2, BorderLayout.WEST);
-//        outer.add(p2, BorderLayout.NORTH);
-
-
-
 
         dcd = new DefaultCategoryDataset();
         JFreeChart jFreeChart = ChartFactory.createStackedBarChart3D(
                 "TOTAL",
-                "Part of raspiratory tract",
-                "Percentage (%)",
+                "Region of raspiratory tract",
+                "Percentage",
                 dcd, PlotOrientation.VERTICAL,
                 true,
                 false,
@@ -162,32 +147,19 @@ public class Window extends JFrame {
 
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         DecimalFormat df = new DecimalFormat("##.##");
-        renderer.setItemLabelGenerator( new StandardCategoryItemLabelGenerator("{2}", df));
+        DecimalFormat df2 = new DecimalFormat("#.##");
+
+        renderer.setItemLabelGenerator( new StandardCategoryItemLabelGenerator("{2} %", df2));
         plot.setRenderer(renderer);
+
         renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.CENTER, TextAnchor.TOP_CENTER));
         renderer.setItemLabelsVisible(true);
         jFreeChart.getCategoryPlot().setRenderer(renderer);
 
         r = new ChartPanel(jFreeChart);
-        r.setMinimumSize(new Dimension(500, 450));
+        r.setPreferredSize(new Dimension(1100, 490));
+        r.setMinimumSize(new Dimension(500, 490));
         getContentPane().add(r);
-
-
-//        ValueMarker vm = new ValueMarker(50);
-//        vm.setLabel("hefe");
-//        vm.setLabelAnchor(RectangleAnchor.BOTTOM);
-//        vm.setLabelTextAnchor(TextAnchor.BOTTOM_RIGHT);
-//        vm.setPaint(Color.BLACK);
-
-//        plot.addRangeMarker(vm);
-
-
-
-
-        //        ChartFrame r = new ChartFrame("heello", jFreeChart, true);
-//        r.setSize(400, 300);
-//        r.setVisible(true);
-
 
         setLocationRelativeTo(null);
         setVisible(true);
@@ -258,105 +230,11 @@ public class Window extends JFrame {
             public void warn() {
                 try {
                     double num = Double.parseDouble(ta.getText());
-//                        System.out.println("valtozas");
                     errorLabel.setText("");
-
-//                        if (SubjectComboBox.subj != null){
-//                            SubjectComboBox.subj = null;
-//                            ActivityComboBox.act = null;
-//                        }
-
                 } catch (NumberFormatException nfe) {
                     errorLabel.setText("Please enter a valid number!");
                 }
             }
         });
     }
-
 }
-
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            model.setValue(…);
-//        }
-//        button.addActionListener(new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent arg0) {
-//                doStuff();
-//            }
-//        });
-
-
-//    private void fr(){
-//        JPanel panel = new JPanel();
-//        JFrame frame = new JFrame();
-//        frame.setSize(800,480);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.add(panel);
-//
-//        panel.setLayout(null);
-//        JLabel subjectLabel = new JLabel("Subject");
-//        subjectLabel.setBounds(10, 20, 80, 25);
-//        panel.add(subjectLabel);
-//
-//        JTextField subjectText = new JTextField();
-//        subjectText.setBounds(100, 20, 165, 25);
-//        panel.add(subjectText);
-//
-//        JLabel actLabel = new JLabel("Activity");
-//        actLabel.setBounds(10, 50, 80, 25);
-//        panel.add(actLabel);
-//
-//        frame.setVisible(true);
-//    }
-
-
-
-
-//textArea.getDocument().addDocumentListener(new DocumentListener() {
-//public void changedUpdate(DocumentEvent e) {
-//        warn();
-//        }
-//public void removeUpdate(DocumentEvent e) {
-//        warn();
-//        }
-//public void insertUpdate(DocumentEvent e) {
-//        warn();
-//        }
-//
-//public void warn() {
-////                if (Integer.parseInt(textArea.getText())<=0){
-////                    JOptionPane.showMessageDialog(null,
-////                            "Error: Please enter number bigger than 0", "Error Message",
-////                            JOptionPane.ERROR_MESSAGE);
-////                }
-//        System.out.println("valtozas");
-//        }
-//        });
-
-
-//    private void showExitConfirmation() {
-//        int n = JOptionPane.showConfirmDialog(this, "Valóban ki akar lépni?",
-//                "Megerősítés", JOptionPane.YES_NO_OPTION);
-//        if (n == JOptionPane.YES_OPTION) {
-//            doUponExit();
-//        }
-//    }
-//
-//    protected void doUponExit() {
-//        this.dispose();
-//    }
-
-
-//fr();
-//        setSize(400, 450);
-//        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-//        addWindowListener(new WindowAdapter() {
-//
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                showExitConfirmation();
-//            }
-//
-//        });

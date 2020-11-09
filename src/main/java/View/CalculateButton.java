@@ -33,9 +33,6 @@ public class CalculateButton extends JButton implements ActionListener {
         addActionListener(this);
 
         this.addActionListener(buttonPressed);
-//        this.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).
-//                put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter_pressed");
-//        this.getActionMap().put("Enter_pressed", buttonPressed);
 
         this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), this.getText());
         this.getActionMap().put(this.getText(), new Click(this));
@@ -57,7 +54,6 @@ public class CalculateButton extends JButton implements ActionListener {
             for (String a : mouth.printRDE()) {
                 sb.append(a + "\n");
             }
-//            Window.setSB(sb);
             Window.textArea.setText(sb.toString());
             Window.subjectLabel.setText("Result: ");
         }
@@ -77,9 +73,6 @@ public class CalculateButton extends JButton implements ActionListener {
         }
     }
 
-
-
-
     public List<String> mo(Subject sub) {
         mouth = new Mouth(sub);
         mouth.print();
@@ -90,26 +83,4 @@ public class CalculateButton extends JButton implements ActionListener {
         public Mouth getMouth(){
             return mouth;
         }
-
-    //    public class Button extends JButton implements ActionListener {
-//        private int counter = 0;
-//
-//        public Button(){
-//            addActionListener(this);
-//            setText("Kattintasok szama: " + counter);
-//        }
-//
-//        @Override
-//        public void actionPerformed(ActionEvent ae){
-//            ++counter;
-//            refreshText();
-//            //System.out.println(counter);
-//        }
-//
-//        private void refreshText(){
-//            setText("Kattintasok szama: " + counter);
-//        }
-//    }
-
-
 }

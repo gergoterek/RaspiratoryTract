@@ -75,8 +75,5 @@ public class Male extends Subject {
                act.setV(1670);
                break;
        }
-
    }
-
-
 }
