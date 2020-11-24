@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static View.SubjectComboBox.subj;
+import static View.SubjectComboBox.createdAct;
 
 public class CalculateButton extends JButton implements ActionListener {
 
@@ -42,10 +43,10 @@ public class CalculateButton extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ae){
-        if (subj != null && ActivityComboBox.act != null) {
+        if (subj != null && Window.errorLabel.getText().equals("")) {
+
             subj.values = Window.values();
             Mouth mouth = new Mouth(subj);
-
 
             Window.setChartVisible( new ArrayList<Double>
                     (Arrays.asList(mouth.getTotal(), mouth.getET(), mouth.getBB(), mouth.get_bb(), mouth.getAI(), mouth.getLung())));

@@ -16,7 +16,7 @@ public class SubjectComboBox extends JComboBox implements ActionListener {
 
     public String s = "-";
 
-    static Activity createdAct;
+    public static Activity createdAct;
 
 
     public SubjectComboBox(){
@@ -29,28 +29,30 @@ public class SubjectComboBox extends JComboBox implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae){
 
-        if ( ActivityComboBox.act != null) {
-            createdAct = ActivityComboBox.act;
+        String sub = String.valueOf(this.getSelectedItem());
+        s = sub;
+        switch (sub) {
+            case "-":
+                System.out.println("OPTION: " + sub);
+                subj = null;
+                break;
+            case "Male":
+                subj = new Male(createdAct, Window.values());
+                changeLabel();
+                break;
+            case "Female":
+                subj = new Female(createdAct, Window.values());
+                changeLabel();
+                break;
+            default:
+                break;
+        }
 
+    }
 
-            String sub = String.valueOf(this.getSelectedItem());
-            s = sub;
-            switch (sub) {
-                case "-":
-                    System.out.println("OPTION: " + sub);
-                    subj = null;
-                    break;
-                case "Male":
-                    subj = new Male(createdAct, Window.values());
-                    Window.ta.setText(String.valueOf(subj.getActivity().getV()));
-                    break;
-                case "Female":
-                    subj = new Female(createdAct, Window.values());
-                    Window.ta.setText(String.valueOf(subj.getActivity().getV()));
-                    break;
-                default:
-                    break;
-            }
+    public static void changeLabel(){
+        if(createdAct != null) {
+            Window.ta.setText(String.valueOf(subj.getActivity().getV()));
         }
     }
 }

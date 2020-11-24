@@ -52,6 +52,8 @@ public class Mouth {
                 : subject.values.get(3);
         fi = 1 + 100 * Math.exp( -Math.pow( Math.log( 100 + 10 / Math.pow( getFlowInh(), 0.9) ), 2));
         aBB = 22.02 * Math.pow(subject.getSFa(), 1.24) * fi;
+
+
     }
 
 

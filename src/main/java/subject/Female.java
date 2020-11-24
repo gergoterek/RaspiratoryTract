@@ -11,10 +11,12 @@ public class Female extends Subject{
     public Female (Activity activity, List<Double> customParams ) {
 
         setParams();
-        setActParam(activity);
-        super.setActivity(activity);
-
-
+        if(activity != null) {
+            setActParam(activity);
+            super.setActivity(activity);
+        } else {
+            super.setActivity(null);
+        }
     }
 
 

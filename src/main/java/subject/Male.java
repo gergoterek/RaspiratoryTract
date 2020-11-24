@@ -15,10 +15,14 @@ public class Male extends Subject {
 
    public Male ( Activity activity, List<Double> customParams ) {
        setParams();
-       setActParam(activity);
-       super.setActivity(activity);
-
+       if(activity != null) {
+           setActParam(activity);
+           super.setActivity(activity);
+       } else {
+           super.setActivity(null);
+       }
        super.values = customParams;
+
    }
 
 

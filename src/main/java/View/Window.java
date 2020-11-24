@@ -71,17 +71,17 @@ public class Window extends JFrame {
 
 
         JPanel mainPanel = new JPanel(new FlowLayout());
-        mainPanel.add(acb);
         mainPanel.add(scb);
+        mainPanel.add(acb);
         mainPanel.add(cb);
         getContentPane().add(mainPanel);
 
 
         JPanel j1 = new JPanel(new FlowLayout());
-        JLabel l1 = new JLabel("Lung volumetric (ml): ");
+        JLabel l1 = new JLabel("Inhaled air volume (ml): ");
         j1.add(l1);
         ta = new JTextField("3000");
-        setInputFields(ta);
+        setInputFields(ta, true);
         j1.add(ta);
         getContentPane().add(j1);
 
@@ -89,7 +89,7 @@ public class Window extends JFrame {
         JLabel l2 = new JLabel("Inhalation time (sec): ");
         j2.add(l2);
         ta2 = new JTextField("2");
-        setInputFields(ta2);
+        setInputFields(ta2, false);
         j2.add(ta2);
         getContentPane().add(j2);
 
@@ -97,17 +97,22 @@ public class Window extends JFrame {
         JLabel l3 = new JLabel("Exhalation time (sec): ");
         j3.add(l3);
         ta3 = new JTextField("2");
-        setInputFields(ta3);
+        setInputFields(ta3, false);
         j3.add(ta3);
         getContentPane().add(j3);
 
         JPanel j4 = new JPanel(new FlowLayout());
-        JLabel l4 = new JLabel("Particle size (mm): ");
+        JLabel l4 = new JLabel("Particle diameter (μm): ");
         j4.add(l4);
         ta4 = new JTextField("0.005");
-        setInputFields(ta4);
+        setInputFields(ta4, false);
         j4.add(ta4);
         getContentPane().add(j4);
+
+        Window.ta.setEditable(false);
+        Window.ta2.setEditable(false);
+        Window.ta3.setEditable(false);
+        Window.ta4.setEditable(false);
 
 
         errorLabel = new JLabel("");
@@ -134,9 +139,9 @@ public class Window extends JFrame {
 
         dcd = new DefaultCategoryDataset();
         JFreeChart jFreeChart = ChartFactory.createStackedBarChart3D(
-                "TOTAL",
+                "Deposition distribution",
                 "Region of raspiratory tract",
-                "Percentage",
+                "Deposition fraction (%)",
                 dcd, PlotOrientation.VERTICAL,
                 true,
                 false,
@@ -178,6 +183,7 @@ public class Window extends JFrame {
 
 
 
+
     public static ArrayList<Double> values(){
         ArrayList<Double> a = new ArrayList<>();
         try {
@@ -209,7 +215,7 @@ public class Window extends JFrame {
     }
 
 
-    void setInputFields(JTextField ta){
+    void setInputFields(JTextField ta, boolean isVol){
 
 //        ta.setBounds(10, 20, 8, 2);
         ta.setPreferredSize(new Dimension(80, 20));
@@ -230,9 +236,16 @@ public class Window extends JFrame {
             public void warn() {
                 try {
                     double num = Double.parseDouble(ta.getText());
-                    errorLabel.setText("");
+                    if(isVol && num < 150.8){
+                        throw new NumberFormatException();
+                    } else {
+                        errorLabel.setText("");
+                        cb.setEnabled(true);
+                    }
                 } catch (NumberFormatException nfe) {
                     errorLabel.setText("Please enter a valid number!");
+                    errorLabel.setForeground(Color.RED);
+                    cb.setEnabled(false);
                 }
             }
         });
