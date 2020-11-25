@@ -1,6 +1,7 @@
 package View;
 
 import model.Mouth;
+import model.Nose;
 import subject.Male;
 import subject.Subject;
 
@@ -18,8 +19,8 @@ import static View.SubjectComboBox.createdAct;
 public class CalculateButton extends JButton implements ActionListener {
 
 
-    Mouth mouth;
     StringBuilder sb = new StringBuilder();
+
 
     AbstractAction buttonPressed = new AbstractAction() {
         @Override
@@ -43,17 +44,25 @@ public class CalculateButton extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ae){
-        if (subj != null && Window.errorLabel.getText().equals("")) {
+        if (subj != null && Window.errorLabel.getText().equals("") && !BreathComboBox.mode.equals("")) {
 
             subj.values = Window.values();
-            Mouth mouth = new Mouth(subj);
-
-            Window.setChartVisible( new ArrayList<Double>
-                    (Arrays.asList(mouth.getTotal(), mouth.getET(), mouth.getBB(), mouth.get_bb(), mouth.getAI(), mouth.getLung())));
-
             sb.setLength(0);
-            for (String a : mouth.printRDE()) {
-                sb.append(a + "\n");
+            if(BreathComboBox.mode.equals("Mouth")) {
+                Mouth mouth = new Mouth(subj);
+                Window.setChartVisible( new ArrayList<Double>
+                        (Arrays.asList(mouth.getTotal(), mouth.getET(), mouth.getBB(), mouth.get_bb(), mouth.getAI(), mouth.getLung())));
+                for (String a : mouth.printRDE()) {
+                    sb.append(a);
+                }
+            } else {
+                Nose nose = new Nose(subj);
+                Window.setChartVisible( new ArrayList<Double>
+                        (Arrays.asList(nose.getTotal(), nose.getET2(), nose.getBB(), nose.get_bb(), nose.getAI(), nose.getLung(), nose.getET1())));
+                for (String a : nose.printRDE()) {
+                    sb.append(a);
+                }
+
             }
             Window.textArea.setText(sb.toString());
             Window.subjectLabel.setText("Result: ");
@@ -74,14 +83,14 @@ public class CalculateButton extends JButton implements ActionListener {
         }
     }
 
-    public List<String> mo(Subject sub) {
-        mouth = new Mouth(sub);
-        mouth.print();
-        mouth.printThermo();
-        return mouth.printRDE();
-    }
-
-        public Mouth getMouth(){
-            return mouth;
-        }
+//    public List<String> mo(Subject sub) {
+//        mouth = new Mouth(sub);
+//        mouth.print();
+//        mouth.printThermo();
+//        return mouth.printRDE();
+//    }
+//
+//        public Mouth getMouth(){
+//            return mouth;
+//        }
 }

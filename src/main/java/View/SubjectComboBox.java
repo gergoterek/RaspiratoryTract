@@ -1,6 +1,7 @@
 package View;
 
 import activity.Activity;
+import model.Nose;
 import subject.Female;
 import subject.Male;
 import subject.Subject;
@@ -39,6 +40,7 @@ public class SubjectComboBox extends JComboBox implements ActionListener {
             case "Male":
                 subj = new Male(createdAct, Window.values());
                 changeLabel();
+
                 break;
             case "Female":
                 subj = new Female(createdAct, Window.values());

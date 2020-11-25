@@ -21,6 +21,7 @@ public class ActivityComboBox extends JComboBox implements ActionListener {
 
     public static Activity act = new HeavyExcercise();
     public String s = "-";
+    public boolean isSet = false;
 
 
     public ActivityComboBox(){
@@ -43,6 +44,8 @@ public class ActivityComboBox extends JComboBox implements ActionListener {
                 Window.ta2.setEditable(false);
                 Window.ta3.setEditable(false);
                 Window.ta4.setEditable(false);
+                isSet = false;
+
                 break;
             case "HeavyExcercise":
                 SubjectComboBox.createdAct = new HeavyExcercise();
@@ -77,12 +80,12 @@ public class ActivityComboBox extends JComboBox implements ActionListener {
                 subj = new Female(createdAct, Window.values());
             }
             Window.ta.setText(String.valueOf(subj.getActivity().getV()));
-
         }
        Window.ta.setEditable(false);
        Window.ta2.setEditable(true);
        Window.ta3.setEditable(true);
        Window.ta4.setEditable(true);
+       isSet = true;
    }
 
    void changeCustomLabels(){
@@ -92,10 +95,12 @@ public class ActivityComboBox extends JComboBox implements ActionListener {
            } else {
                subj = new Female(createdAct, Window.values());
            }
-           Window.ta.setEditable(true);
-           Window.ta2.setEditable(true);
-           Window.ta3.setEditable(true);
-           Window.ta4.setEditable(true);
+
        }
+       Window.ta.setEditable(true);
+       Window.ta2.setEditable(true);
+       Window.ta3.setEditable(true);
+       Window.ta4.setEditable(true);
+       isSet = true;
    }
 }

@@ -1,4 +1,6 @@
+import View.SubjectComboBox;
 import View.Window;
+import model.Nose;
 
 public class Main {
 

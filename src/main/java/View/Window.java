@@ -30,7 +30,8 @@ import java.util.ArrayList;
 public class Window extends JFrame {
     ActivityComboBox acb;
     SubjectComboBox scb;
-    CalculateButton cb;
+    public static CalculateButton cb;
+    BreathComboBox bcb;
 
     public static JTextArea textArea;
     public static JLabel subjectLabel;
@@ -54,6 +55,7 @@ public class Window extends JFrame {
         acb = new ActivityComboBox();
         scb = new SubjectComboBox();
         cb = new CalculateButton();
+        bcb = new BreathComboBox();
 
         textArea = new JTextArea();
         subjectLabel = new JLabel("Choose subject and activity to calculate!");
@@ -71,6 +73,7 @@ public class Window extends JFrame {
 
 
         JPanel mainPanel = new JPanel(new FlowLayout());
+        mainPanel.add(bcb);
         mainPanel.add(scb);
         mainPanel.add(acb);
         mainPanel.add(cb);
@@ -128,12 +131,11 @@ public class Window extends JFrame {
         textArea.setText(txt);
         textArea.setEditable(false);
         textArea.setFont(new Font("Calibri", Font.ITALIC, 16));
-        textArea.setWrapStyleWord(true);
+        textArea.setWrapStyleWord(false);
         textArea.setOpaque(false);
-        p.add(textArea);
 
         JPanel outer = new JPanel(new BorderLayout());
-
+        p.add(textArea);
         outer.add(p, BorderLayout.NORTH);
         getContentPane().add(outer);
 
@@ -165,6 +167,11 @@ public class Window extends JFrame {
         r.setPreferredSize(new Dimension(1100, 490));
         r.setMinimumSize(new Dimension(500, 490));
         getContentPane().add(r);
+
+//        JPanel outer = new JPanel(new BorderLayout());
+//        p.add(textArea);
+//        outer.add(p, BorderLayout.NORTH);
+//        getContentPane().add(outer);
 
         setLocationRelativeTo(null);
         setVisible(true);
@@ -204,14 +211,24 @@ public class Window extends JFrame {
 
 
     public static void setChartVisible(ArrayList<Double> res){
-        dcd.clear();
 
-        dcd.setValue(res.get(0), "TOTAL", "LUNG + ET");
-        dcd.setValue(res.get(5), "LUNG", "BB + bb + AI");
-        dcd.setValue(res.get(1), "ET", "ET");
-        dcd.setValue(res.get(2), "BB", "BB");
-        dcd.setValue(res.get(3), "bb", "bb");
-        dcd.setValue(res.get(4), "AI", "AI");
+        dcd.clear();
+        if (res.size() == 6) {
+            dcd.setValue(res.get(0), "TOTAL", "LUNG + ET");
+            dcd.setValue(res.get(5), "LUNG", "BB + bb + AI");
+            dcd.setValue(res.get(1), "ET", "ET");
+            dcd.setValue(res.get(2), "BB", "BB");
+            dcd.setValue(res.get(3), "bb", "bb");
+            dcd.setValue(res.get(4), "AI", "AI");
+        } else {
+            dcd.setValue(res.get(0), "TOTAL", "LUNG + ET");
+            dcd.setValue(res.get(5), "LUNG", "BB + bb + AI");
+            dcd.setValue(res.get(6), "ET1", "ET1");
+            dcd.setValue(res.get(1), "ET2", "ET2");
+            dcd.setValue(res.get(2), "BB", "BB");
+            dcd.setValue(res.get(3), "bb", "bb");
+            dcd.setValue(res.get(4), "AI", "AI");
+        }
     }
 
 
