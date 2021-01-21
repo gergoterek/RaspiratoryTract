@@ -1,2 +1,2 @@
 @echo off
-java -cp ICRP.jar Main
+java -cp "ICRP with MMAD.jar" Main

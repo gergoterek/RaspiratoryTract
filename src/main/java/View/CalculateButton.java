@@ -50,19 +50,34 @@ public class CalculateButton extends JButton implements ActionListener {
             sb.setLength(0);
             if(BreathComboBox.mode.equals("Mouth")) {
                 Mouth mouth = new Mouth(subj);
-                Window.setChartVisible( new ArrayList<Double>
-                        (Arrays.asList(mouth.getTotal(), mouth.getET(), mouth.getBB(), mouth.get_bb(), mouth.getAI(), mouth.getLung())));
-                for (String a : mouth.printRDE()) {
-                    sb.append(a);
+                if (Window.ta4.isVisible()) {
+                    Window.setChartVisible(new ArrayList<Double>
+                            (Arrays.asList(mouth.getTotal(), mouth.getET(), mouth.getBB(), mouth.get_bb(), mouth.getAI(), mouth.getLung())));
+                    for (String a : mouth.printRDE()) {
+                        sb.append(a);
+                    }
+                } else {
+                    Window.setChartVisible(new ArrayList<Double>
+                            (Arrays.asList(mouth.getTotalMMAD(), mouth.getETMMAD(), mouth.getBBMMAD(), mouth.get_bbMMAD(), mouth.getAIMMAD(), mouth.getLungMMAD())));
+                    for (String a : mouth.printRDEMMAD()) {
+                        sb.append(a);
+                    }
                 }
             } else {
                 Nose nose = new Nose(subj);
-                Window.setChartVisible( new ArrayList<Double>
-                        (Arrays.asList(nose.getTotal(), nose.getET2(), nose.getBB(), nose.get_bb(), nose.getAI(), nose.getLung(), nose.getET1())));
-                for (String a : nose.printRDE()) {
-                    sb.append(a);
+                if (Window.ta4.isVisible()) {
+                    Window.setChartVisible( new ArrayList<Double>
+                            (Arrays.asList(nose.getTotal(), nose.getET2(), nose.getBB(), nose.get_bb(), nose.getAI(), nose.getLung(), nose.getET1())));
+                    for (String a : nose.printRDE()) {
+                        sb.append(a);
+                    }
+                } else {
+                    Window.setChartVisible(new ArrayList<Double>
+                            (Arrays.asList(nose.getTotalMMAD(), nose.getET1MMAD(), nose.getET2MMAD(), nose.getBBMMAD(), nose.get_bbMMAD(), nose.getAIMMAD(), nose.getLungMMAD())));
+                    for (String a : nose.printRDEMMAD()) {
+                        sb.append(a);
+                    }
                 }
-
             }
             Window.textArea.setText(sb.toString());
             Window.subjectLabel.setText("Result: ");

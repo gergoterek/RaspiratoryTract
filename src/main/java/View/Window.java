@@ -36,7 +36,8 @@ public class Window extends JFrame {
     public static JTextArea textArea;
     public static JLabel subjectLabel;
     public static JLabel errorLabel;
-    public static String txt;
+    public static String resultText;
+    public static JTabbedPane tabbedPane;
 
     JPanel p;
 
@@ -44,25 +45,96 @@ public class Window extends JFrame {
     static JTextField ta2;
     static JTextField ta3;
     static JTextField ta4;
+    static JLabel l4;
+
+    static JTextField tai;
+    static JTextField tai2;
+    static JTextField tai3;
+    static JTextField tai4;
 
     static DefaultCategoryDataset dcd;
     ChartPanel r;
 
+    static JPanel firstPanel;
+    //static JPanel secondPanel;
 
+    static JPanel ji1;
+    static JPanel ji2;
+    static JPanel ji3;
+    static JPanel ji4;
+
+    JPanel jp;
 
     public Window() {
 
-        acb = new ActivityComboBox();
-        scb = new SubjectComboBox();
-        cb = new CalculateButton();
-        bcb = new BreathComboBox();
-
-        textArea = new JTextArea();
-        subjectLabel = new JLabel("Choose subject and activity to calculate!");
-
-        txt = "";
-
+        initPanels();
         addWindowListener(new ExitAdapter());
+        inputPanel(firstPanel);
+
+        errorLabel = new JLabel("");
+        firstPanel.add(errorLabel);
+
+        if (SubjectComboBox.subj != null){
+            ta.setText(String.valueOf(SubjectComboBox.subj.getActivity().getV()));
+        }
+
+        //resultText
+        resultTextArea();
+        p = new JPanel();
+        p.add(textArea);
+        JPanel outer = new JPanel(new BorderLayout());
+        outer.add(p, BorderLayout.NORTH);
+        firstPanel.add(outer);
+
+
+
+        //diagram
+        dcd = new DefaultCategoryDataset();
+        createDiagram(dcd, firstPanel);
+
+        //tabs
+        tabbedPane.add("First panel",firstPanel);
+        tabbedPane.setAutoscrolls(true);
+        //tabbedPane.revalidate();
+        //JScrollPane jsp = new JScrollPane();
+        //getContentPane().add(jsp);
+        getContentPane().add(tabbedPane);
+
+        add(new ScrollPanePanel());
+
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    void resultTextArea(){
+        subjectLabel = new JLabel("Choose subject and activity to calculate!");
+        textArea = new JTextArea();
+        resultText = "";
+        textArea.setText(resultText);
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Calibri", Font.ITALIC, 16));
+        textArea.setWrapStyleWord(false);
+        textArea.setOpaque(false);
+    }
+
+    void initTextFields(){
+        ta.setEditable(false);
+        ta2.setEditable(false);
+        ta3.setEditable(false);
+        ta4.setEditable(false);
+    }
+
+    void initPanels(){
+
+        firstPanel = new JPanel();
+        firstPanel.setLayout(
+                new BoxLayout(firstPanel, BoxLayout.Y_AXIS)
+        );
+
+        jp = new JPanel();
+        jp.setLayout(new GridLayout(1,2));
+
 
         setTitle("ICRP");
         setSize(1100, 860);
@@ -71,13 +143,21 @@ public class Window extends JFrame {
                 new BoxLayout(getContentPane(), BoxLayout.Y_AXIS)
         );
 
+        acb = new ActivityComboBox();
+        scb = new SubjectComboBox();
+        cb = new CalculateButton();
+        bcb = new BreathComboBox();
+        tabbedPane = new JTabbedPane();
+    }
 
+    void inputPanel(JPanel firstPanel){
         JPanel mainPanel = new JPanel(new FlowLayout());
         mainPanel.add(bcb);
         mainPanel.add(scb);
         mainPanel.add(acb);
         mainPanel.add(cb);
-        getContentPane().add(mainPanel);
+        //getContentPane().add(mainPanel);
+        firstPanel.add(mainPanel);
 
 
         JPanel j1 = new JPanel(new FlowLayout());
@@ -86,7 +166,8 @@ public class Window extends JFrame {
         ta = new JTextField("3000");
         setInputFields(ta, true);
         j1.add(ta);
-        getContentPane().add(j1);
+        //getContentPane().add(j1);
+        firstPanel.add(j1);
 
         JPanel j2 = new JPanel(new FlowLayout());
         JLabel l2 = new JLabel("Inhalation time (sec): ");
@@ -94,7 +175,7 @@ public class Window extends JFrame {
         ta2 = new JTextField("2");
         setInputFields(ta2, false);
         j2.add(ta2);
-        getContentPane().add(j2);
+        firstPanel.add(j2);
 
         JPanel j3 = new JPanel(new FlowLayout());
         JLabel l3 = new JLabel("Exhalation time (sec): ");
@@ -102,44 +183,81 @@ public class Window extends JFrame {
         ta3 = new JTextField("2");
         setInputFields(ta3, false);
         j3.add(ta3);
-        getContentPane().add(j3);
+        firstPanel.add(j3);
 
         JPanel j4 = new JPanel(new FlowLayout());
-        JLabel l4 = new JLabel("Particle diameter (μm): ");
+        l4 = new JLabel("Particle diameter (μm): ");
         j4.add(l4);
-        ta4 = new JTextField("0.005");
+        ta4 = new JTextField("5");
         setInputFields(ta4, false);
         j4.add(ta4);
-        getContentPane().add(j4);
 
-        Window.ta.setEditable(false);
-        Window.ta2.setEditable(false);
-        Window.ta3.setEditable(false);
-        Window.ta4.setEditable(false);
+        //MMAD input field
+        MMADinput();
+
+        //MMAD button
+        MMADbutton mmad = new MMADbutton();
+        j4.add(mmad);
+        firstPanel.add(j4);
+    }
+
+    void MMADinput(){
+        ji1 = new JPanel(new FlowLayout());
+        JLabel li1 = new JLabel("MMAD (μm): ");
+        li1.setForeground(Color.BLUE);
+        ji1.add(li1);
+        tai = new JTextField("3.93");
+        setInputFields(tai, false);
+        ji1.add(tai);
+        //getContentPane().add(j1);
+        firstPanel.add(ji1);
+
+        ji2 = new JPanel(new FlowLayout());
+        JLabel li2 = new JLabel("Fine particle fraction (%): ");
+        li2.setForeground(Color.BLUE);
+        ji2.add(li2);
+        tai2 = new JTextField("14.76");
+        setInputFields(tai2, false);
+        ji2.add(tai2);
+        firstPanel.add(ji2);
+
+        ji3 = new JPanel(new FlowLayout());
+        JLabel li3 = new JLabel("Geometric standard deviation: ");
+        li3.setForeground(Color.BLUE);
+        ji3.add(li3);
+        tai3 = new JTextField("2");
+        setInputFields(tai3, false);
+        ji3.add(tai3);
+        firstPanel.add(ji3);
+
+        ji4 = new JPanel(new FlowLayout());
+        JLabel li4 = new JLabel("Emitted dosis (%): ");
+        li4.setForeground(Color.BLUE);
+        ji4.add(li4);
+        tai4 = new JTextField("71.94");
+        setInputFields(tai4, false);
+        ji4.add(tai4);
+        firstPanel.add(ji4);
 
 
-        errorLabel = new JLabel("");
-        getContentPane().add(errorLabel);
+        ji1.setVisible(false);
+        ji2.setVisible(false);
+        ji3.setVisible(false);
+        ji4.setVisible(false);
+    }
 
-        if (SubjectComboBox.subj != null){
-            ta.setText(String.valueOf(SubjectComboBox.subj.getActivity().getV()));
+    public static void setSB (StringBuilder sb){
+        resultText = sb.toString();
+    }
+
+    public class ExitAdapter extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            System.exit(0);
         }
+    }
 
-
-        p = new JPanel();
-
-        textArea.setText(txt);
-        textArea.setEditable(false);
-        textArea.setFont(new Font("Calibri", Font.ITALIC, 16));
-        textArea.setWrapStyleWord(false);
-        textArea.setOpaque(false);
-
-        JPanel outer = new JPanel(new BorderLayout());
-        p.add(textArea);
-        outer.add(p, BorderLayout.NORTH);
-        getContentPane().add(outer);
-
-        dcd = new DefaultCategoryDataset();
+    void createDiagram(DefaultCategoryDataset dcd, JPanel firstPanel){
         JFreeChart jFreeChart = ChartFactory.createStackedBarChart3D(
                 "Deposition distribution",
                 "Region of raspiratory tract",
@@ -147,10 +265,12 @@ public class Window extends JFrame {
                 dcd, PlotOrientation.VERTICAL,
                 true,
                 false,
-                false);
+                false
+        );
 
         CategoryPlot plot = jFreeChart.getCategoryPlot();
         plot.setRangeGridlinePaint(Color.BLACK);
+        plot.setRangePannable(true);
 
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         DecimalFormat df = new DecimalFormat("##.##");
@@ -164,31 +284,10 @@ public class Window extends JFrame {
         jFreeChart.getCategoryPlot().setRenderer(renderer);
 
         r = new ChartPanel(jFreeChart);
-        r.setPreferredSize(new Dimension(1100, 490));
-        r.setMinimumSize(new Dimension(500, 490));
-        getContentPane().add(r);
-
-//        JPanel outer = new JPanel(new BorderLayout());
-//        p.add(textArea);
-//        outer.add(p, BorderLayout.NORTH);
-//        getContentPane().add(outer);
-
-        setLocationRelativeTo(null);
-        setVisible(true);
+        r.setPreferredSize(new Dimension(1100, 390));
+        r.setMinimumSize(new Dimension(500, 390));
+        firstPanel.add(r);
     }
-
-    public static void setSB (StringBuilder sb){
-        txt = sb.toString();
-    }
-
-    public class ExitAdapter extends WindowAdapter {
-        @Override
-        public void windowClosing(WindowEvent e) {
-            System.exit(0);
-        }
-    }
-
-
 
 
     public static ArrayList<Double> values(){
@@ -205,6 +304,31 @@ public class Window extends JFrame {
         try {
             a.add(Double.parseDouble(ta4.getText()));
         }catch (Exception e){a.add(null);}
+
+
+
+        if(!ta4.isVisible()) {
+            try {
+                a.add(Double.parseDouble(tai.getText()));
+            } catch (Exception e) {
+                a.add(null);
+            }
+            try {
+                a.add(Double.parseDouble(tai2.getText()));
+            } catch (Exception e) {
+                a.add(null);
+            }
+            try {
+                a.add(Double.parseDouble(tai3.getText()));
+            } catch (Exception e) {
+                a.add(null);
+            }
+            try {
+                a.add(Double.parseDouble(tai4.getText()));
+            } catch (Exception e) {
+                a.add(null);
+            }
+        }
 
         return a;
     }
@@ -254,6 +378,7 @@ public class Window extends JFrame {
                 try {
                     double num = Double.parseDouble(ta.getText());
                     if(isVol && num < 150.8){
+                        System.out.println(num);
                         throw new NumberFormatException();
                     } else {
                         errorLabel.setText("");

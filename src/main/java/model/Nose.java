@@ -3,6 +3,7 @@ package model;
 import subject.Subject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Nose implements Breath{
@@ -12,15 +13,30 @@ public class Nose implements Breath{
     private final double inhTime;
     private final double exhTime;
     private final double vol;
-    private final double pSize;
+    private double pSize;
 
+    private final double fi;
+    private final double aBB;
     private final double SFa;
     private final double SFb;
     private final double SFt;
 
-    private final double fi;
-    private final double aBB;
+    private final double MMAD;
+    private final double FPF;
+    private final double GSD;
+    private final double ED;
 
+    private double A;
+    private double B;
+    private double AF;
+    private double d16;
+    private double d84;
+    private double dPS;
+    private double dNR;
+
+    private ArrayList<Double> etaValues;
+    private ArrayList<Double> fList;
+    private ArrayList<Double> res;
 
 
     public Nose (final Subject sub){
@@ -39,7 +55,7 @@ public class Nose implements Breath{
                 : subject.values.get(2);
         pSize = (subject.values == null || subject.values.get(3) == null )
                 ? 0.005
-                : subject.values.get(3);
+                : subject.values.get(3) * 0.001;
 
         SFa = subject.getSFa();
         SFb = subject.getSFb();
@@ -48,7 +64,95 @@ public class Nose implements Breath{
         fi = 1 + 100 * Math.exp( -Math.pow( Math.log( 100 + 10 / Math.pow( getFlowInh(), 0.9) ), 2));
         aBB = 22.02 * Math.pow(subject.getSFa(), 1.24) * fi;
 
+        if(subject.values.size() > 4){
+            MMAD = (subject.values == null || subject.values.get(4) == null )
+                    ? 0.005
+                    : subject.values.get(4) * 0.001;
+            FPF = (subject.values == null || subject.values.get(5) == null )
+                    ? 12
+                    : subject.values.get(5) * 0.01;
+            GSD = (subject.values == null || subject.values.get(6) == null )
+                    ? 2
+                    : subject.values.get(6);
+            ED = (subject.values == null || subject.values.get(7) == null )
+                    ? 20
+                    : subject.values.get(7) * 0.01;
+            etaValues = new ArrayList<>();
+            fList = new ArrayList<>();
+            initMMADvalues(etaValues, fList);
+        } else {
+            MMAD = 0;
+            FPF = 0;
+            GSD = 0;
+            ED = 0;
+        }
+    }
 
+    void initMMADvalues(List<Double> etaValues, List<Double> fList){
+        A = FPF / (Math.log10(5) + 0.44 - Math.log10(MMAD));
+        B = A * ( 0.44 - Math.log10(MMAD));
+
+        AF = A * ( Math.log10(GSD) / 0.34);
+        d16 = MMAD / GSD;
+        d84 = MMAD * GSD;
+
+        dPS = Math.pow(10, (AF - B) / A);
+
+        etaValues.addAll(Arrays.asList(d16, MMAD, 0.005, d84, dPS, 0.015));
+        fList.addAll(Arrays.asList(0.16 * AF, AF / 2, FPF, 0.84 * AF, AF, ED - AF));
+
+        res = new ArrayList<>();
+        for (int i = 0; i < 7; ++i) {
+            res.add(0.0);
+        }
+
+        for (int i = 0; i < etaValues.size(); ++i){
+            pSize = etaValues.get(i);
+            res.set(0, res.get(0) + sumRDE_BB_bb_AI() * fList.get(i));
+            res.set(1, res.get(1) + sumRDE_ET1() * fList.get(i));
+            res.set(2, res.get(2) + sumRDE_BB() * fList.get(i));
+            res.set(3, res.get(3) + sumRDE_bb() * fList.get(i));
+            res.set(4, res.get(4) + RDE_AI() * fList.get(i));
+            res.set(5, res.get(5) + sumRDE_Lung_ET() * fList.get(i));
+            res.set(6, res.get(6) + sumRDE_ET2() * fList.get(i));
+        }
+        System.out.println(res);
+    }
+
+    public List<String> printRDEMMAD(){
+        List<String> l = new ArrayList<>();
+
+        l.add("TOTAL Lung+ET:       " + res.get(5));
+        l.add("\nLUNG BB+bb+AI:     " + res.get(0));
+        l.add("\nET1 inh+exh:              " + res.get(1));
+        l.add("\nET2 inh + exh:              " + res.get(6));
+        l.add("\nBB inh+exh:              " + res.get(2));
+        l.add("\nbb inh+exh:              " + res.get(3));
+        l.add("\nAI:                               " + res.get(4));
+
+        return l;
+    }
+
+    public double getLungMMAD(){
+        return res.get(0);
+    }
+    public double getET1MMAD(){
+        return res.get(1);
+    }
+    public double getBBMMAD(){
+        return res.get(2);
+    }
+    public double get_bbMMAD(){
+        return res.get(3);
+    }
+    public double getAIMMAD(){
+        return res.get(4);
+    }
+    public double getTotalMMAD(){
+        return res.get(5);
+    }
+    public double getET2MMAD(){
+        return res.get(6);
     }
 
 

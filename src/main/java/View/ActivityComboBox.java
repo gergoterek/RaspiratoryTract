@@ -35,7 +35,7 @@ public class ActivityComboBox extends JComboBox implements ActionListener {
     public void actionPerformed(ActionEvent ae){
         String sub;
         sub = String.valueOf(this.getSelectedItem());
-
+        
         s = sub;
         switch (sub) {
             case "-":
